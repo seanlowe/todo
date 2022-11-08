@@ -1,0 +1,18 @@
+.button {
+  color: white;
+}
+
+.text {
+  height: 18px;
+  margin-right: 5px;
+}
+
+.toolbar {
+  width: 100%;
+  display: inline-flex;
+}
+
+.wrapper {
+  position: absolute;
+  right: 0;
+}

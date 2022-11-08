@@ -1,0 +1,11 @@
+.wrapper {
+  height: 400px;
+  width: 100%;
+}
+
+.container {
+  min-height: 400px;
+  max-height: 400px;
+  overflow-x: 'scroll';
+  margin-bottom: 10px;
+}

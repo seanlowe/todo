@@ -1,0 +1,16 @@
+.description {
+  width: 300px;
+  max-width: 300px;
+  overflow: 'hidden';
+  text-overflow: 'ellipsis';
+  border-style: 'border-box';
+}
+
+.status {
+  width: 120px;
+  max-width: 120px;
+}
+
+.hidden {
+  visibility: hidden;
+}
