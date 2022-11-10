@@ -31,6 +31,7 @@ const CustomTable = () => {
 
   useEffect(() => {
     retrieveRows()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [] )
 
   const notifyAndRetrieveRows = async ( response ) => {
