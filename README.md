@@ -1,11 +1,12 @@
 # Todo Web App
 
 Minimum Requirements:
-- View a list of to-do items with the ability to filter the list by pending, complete, and all to-dos
-- Create a new to-do item
-- Edit a to-do item
-- Delete a to-do item
-- Complete a to-do item
+- [x] View a list of to-do items 
+- [x] Ability to filter the list by pending, complete, and all to-dos
+- [x] Create a new to-do item
+- [x] Edit a to-do item
+- [x] Delete a to-do item
+- [x] Complete a to-do item
 
 Uses: Vercel, Planetscale, Next.js, mySQL, Prisma, Material UI, eslint
 
