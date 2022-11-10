@@ -17,7 +17,7 @@ Sidenote: referenced this comment for errors regarding openssl with Prisma: http
 First, rename the .env.example to just .env
 
 ```bash
-mv .env.example .env
+cp .env.example .env.local
 ```
 
 Values for the `DATABASE_URL` can be plugged in with the values used in and/or returned from the following commands:
