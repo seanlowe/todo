@@ -1,3 +1,4 @@
+import { ToastContainer } from 'react-toastify'
 import Head from 'next/head'
 import CustomTable from '../components/Table'
 import styles from '../styles/Home.module.css'
@@ -16,6 +17,16 @@ export default function Home() {
           Todos
         </h1>
         <CustomTable />
+        <ToastContainer
+          position='bottom-right'
+          autoClose={2000}
+          hideProgressBar
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme='colored'
+        />
       </main>
     </div>
   )

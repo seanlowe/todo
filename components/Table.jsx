@@ -15,26 +15,29 @@ import * as TableService from '../services/react/TableService'
 const CustomTable = () => {
   const [ rows, setRows ] = useState( [] )
   const [ filterStatus, setFilterStatus ] = useState( 'ALL' )
-  // @TODO: add loading status for watermark
-  // const [ loading, setLoading ] = useState( false )
 
-  const retrieveRows = async ( query = 'ALL' ) => {
-    // setLoading( true )
+  const retrieveRows = async ( filter = '' ) => {
+    const query = `status=${ filter ? `${filter}` : `${filterStatus}` }`
     let rows = null
 
-    if ( query === 'ALL' || query === 'status=ALL' ) {
+    if ( query === 'status=ALL' ) {
       rows = await TableService.getRows()
     } else {
       rows = await TableService.getFilteredRows( query )
     }
 
     setRows( rows )
-    // setLoading( false )
   }
 
   useEffect(() => {
-    retrieveRows( 'ALL' )
+    retrieveRows()
   }, [] )
+
+  const notifyAndRetrieveRows = async ( response ) => {
+    TableService.notify( response )
+
+    await retrieveRows()
+  }
 
   const addItem = async ( value ) => {
     const entry = {
@@ -42,20 +45,20 @@ const CustomTable = () => {
       status: 'NEW'
     }
 
-    TableService.addItemToDB( entry ).then( async () => {
-      await retrieveRows()
+    TableService.addItemToDB( entry ).then( async ( response ) => {
+      await notifyAndRetrieveRows( response )
     })
   }
 
   const deleteItem = ( id ) => {
-    TableService.deleteTodoFromDB( id ).then( async () => {
-      await retrieveRows()
+    TableService.deleteTodoFromDB( id ).then( async ( response ) => {
+      await notifyAndRetrieveRows( response )
     })
   }
 
   const updateItem = ( id, field, newFieldValue ) => {
-    TableService.updateTodo( id, field, newFieldValue ).then( async () => {
-      await retrieveRows()
+    TableService.updateTodo( id, field, newFieldValue ).then( async ( response ) => {
+      await notifyAndRetrieveRows( response )
     })
   }
 
@@ -78,7 +81,7 @@ const CustomTable = () => {
         filterStatus={filterStatus}
         filterFn={( filterValue ) => {
           setFilterStatus( filterValue )
-          retrieveRows( `status=${filterValue}` )
+          retrieveRows( filterValue )
         }}
       />
       <TableContainer
