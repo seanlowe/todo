@@ -18,7 +18,7 @@ const CustomTable = () => {
   // @TODO: add loading status for watermark
   // const [ loading, setLoading ] = useState( false )
 
-  const retrieveRows = async ( query = null ) => {
+  const retrieveRows = async ( query = 'ALL' ) => {
     // setLoading( true )
     let rows = null
 
