@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -6,24 +7,46 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
 
-const EditDialog = ({ open, setModelOpen, callback, description }) => {
+const TaskDialog = ({ open, setModelOpen, callback, description, create = false }) => {
+  const [ newDescriptionValue, setNewDescriptionValue ] = useState( create ? '' : description )
+  const cancelModal = () => {
+    setNewDescriptionValue( description )
+    setModelOpen( false )
+  }
 
   const closeModal = () => {
     setModelOpen( false )
   }
+
+  const handleChange = ( event ) => {
+    setNewDescriptionValue( event?.target?.value )
+  }
+
+  const handleConfirm = async ( e ) => {
+    e.preventDefault()
+    await callback( newDescriptionValue )
+    
+    if ( create ) {
+      setNewDescriptionValue( '' )
+    }
+
+    closeModal()
+  }
+
   return (
     <Dialog open={open} onClose={closeModal} maxWidth='sm' fullWidth>
-      <DialogTitle>Edit Task</DialogTitle>
+      <DialogTitle>{create ? 'New' : 'Edit'} Task</DialogTitle>
       <DialogContent>
         <DialogContentText>
-            Write the task&apos;s new description here.
+            Write the task&apos;s description here.
         </DialogContentText>
         <TextField
           autoFocus
-          defaultValue={description}
+          value={newDescriptionValue}
           fullWidth
           label='Description'
           multiline
+          onChange={handleChange}
           rows={4}
           sx={{
             marginTop: 1.5
@@ -31,12 +54,9 @@ const EditDialog = ({ open, setModelOpen, callback, description }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeModal}> Cancel </Button>
+        <Button onClick={cancelModal}> Cancel </Button>
         <Button
-          onClick={() => {
-            callback()
-            closeModal()
-          }}
+          onClick={handleConfirm}
         >
           Confirm
         </Button>
@@ -45,4 +65,4 @@ const EditDialog = ({ open, setModelOpen, callback, description }) => {
   )
 }
 
-export default EditDialog
+export default TaskDialog

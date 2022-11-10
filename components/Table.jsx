@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
 import TableHead from '@mui/material/TableHead'
@@ -6,76 +6,81 @@ import TableCell from '@mui/material/TableCell'
 import TableBody from '@mui/material/TableBody'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-
 import RowItem from './RowItem/RowItem'
 import WatermarkItem from './RowItem/WatermarkedRowItem'
 import ActionsBar from './ActionsBar'
-
-// switch initial data to be fetched from DB
-import { rows as initialRows } from '../data/rows'
-
 import styles from '../styles/Table.module.css'
+import * as TableService from '../services/react/TableService'
 
 const CustomTable = () => {
-  const [ rows, setRows ] = useState( initialRows )
+  const [ rows, setRows ] = useState( [] )
+  const [ filterStatus, setFilterStatus ] = useState( 'ALL' )
+  // @TODO: add loading status for watermark
+  // const [ loading, setLoading ] = useState( false )
 
-  const addItem = () => {
-    const temp = rows.slice()
-    const id = Math.random()
+  const retrieveRows = async ( query = null ) => {
+    // setLoading( true )
+    let rows = null
 
-    temp.push({
-      id,
-      description: `short task name ${id}`,
-      status: 'new'
-    })
+    if ( query === 'ALL' || query === 'status=ALL' ) {
+      rows = await TableService.getRows()
+    } else {
+      rows = await TableService.getFilteredRows( query )
+    }
 
-    setRows( temp )
+    setRows( rows )
+    // setLoading( false )
   }
 
-  const advanceItem = ( action, id ) => {
-    const temp = rows.slice()
-    const newStatus = action === 'complete' ? action : 'pending'
+  useEffect(() => {
+    retrieveRows( 'ALL' )
+  }, [] )
 
-    const item = temp.find(( item ) => {
-      return item.id === id 
+  const addItem = async ( value ) => {
+    const entry = {
+      description: value,
+      status: 'NEW'
+    }
+
+    TableService.addItemToDB( entry ).then( async () => {
+      await retrieveRows()
     })
-    item.status = newStatus
-
-    setRows( temp )
   }
 
   const deleteItem = ( id ) => {
-    const temp = rows.slice().filter(( item ) => {
-      return item.id !== id
+    TableService.deleteTodoFromDB( id ).then( async () => {
+      await retrieveRows()
     })
-
-    setRows( temp )
   }
 
-  const editItem = ( id ) => {
-    console.log( 'edit' )
+  const updateItem = ( id, field, newFieldValue ) => {
+    TableService.updateTodo( id, field, newFieldValue ).then( async () => {
+      await retrieveRows()
+    })
   }
 
-  const rowItemCallback = ( action, id ) => {
+  const rowItemCallback = ( action, id, field = '', value = '' ) => {
     switch ( action ) {
-    case 'complete':
-    case 'start':
-      advanceItem( action, id )
-      return
     case 'delete':
       deleteItem( id )
-      return
-    case 'edit':
-      editItem( id )
-      return
+      break
+    case 'update':
+      updateItem( id, field, value )
     default:
-        // do nothing
+      // do nothing
     }
   }
 
   return (
     <div className={styles.wrapper}>
-      <ActionsBar addFn={addItem} />
+      <ActionsBar
+        addFn={addItem}
+        filterStatus={filterStatus}
+        filterFn={( filterValue ) => {
+          setFilterStatus( filterValue )
+          retrieveRows( `status=${filterValue}` )
+        }}
+      />
       <TableContainer
         className={styles.container}
         component={Paper}
@@ -101,6 +106,7 @@ const CustomTable = () => {
               )
             })}
             {rows.length === 0 && (
+              // add loading indicator here
               <WatermarkItem />
             )}
           </TableBody>

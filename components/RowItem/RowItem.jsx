@@ -5,12 +5,13 @@ import TableCell from '@mui/material/TableCell'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import styles from '../../styles/RowItem.module.css'
-import EditDialog from '../EditDialog'
+import TaskDialog from '../TaskDialog'
+import * as _ from 'lodash'
 
 const RowItem = ({ id, description = null, status = null, callback, }) => {
-  const [ editModalOpen, setEditModalOpen ] = useState( false )
+  const [ taskModalOpen, setTaskModalOpen ] = useState( false )
   const descr = description || 'new task'
-  const stat  = status || 'new'
+  const stat  = status?.toLowerCase() || 'new'
 
   return (
     <TableRow>
@@ -25,13 +26,13 @@ const RowItem = ({ id, description = null, status = null, callback, }) => {
         colSpan={ 3 }
         align='right'
       >
-        { stat }
+        { _.startCase( stat )}
       </TableCell>
       <TableCell colSpan={ 3 } align='right'>
         <Button
           style={{ visibility: stat === 'new' ? 'visible' : 'hidden' }}
           onClick={() => {
-            return callback( 'start', id ) 
+            return callback( 'update', id, 'status', 'PENDING' ) 
           }}
         >
             Start
@@ -39,24 +40,24 @@ const RowItem = ({ id, description = null, status = null, callback, }) => {
         <Button
           style={{ visibility: stat !== 'complete' ? 'visible' : 'hidden' }}
           onClick={() => {
-            return callback( 'complete', id )
+            return callback( 'update', id, 'status', 'COMPLETE' )
           }}
         >
             Complete
         </Button>
         <Button
           onClick={() => {
-            setEditModalOpen( true )
+            setTaskModalOpen( true )
           }}
         >
           <EditIcon />
         </Button>
-        <EditDialog
+        <TaskDialog
           description={descr}
-          open={editModalOpen}
-          setModelOpen={setEditModalOpen}
-          callback={() => {
-            return callback( 'edit', id )
+          open={taskModalOpen}
+          setModelOpen={setTaskModalOpen}
+          callback={( newDescriptionValue ) => {
+            return callback( 'update', id, 'description', newDescriptionValue )
           }}
         />
         <Button
