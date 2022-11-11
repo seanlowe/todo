@@ -4,37 +4,46 @@ const { db } = require( '../../util/scripts/js/check-db-connection' )
 
 const todos = [
   {
-    description: 'learn golang'
+    description: 'learn golang',
+    userId: 2,
   },
   {
-    description: 'go to the moon'
+    description: 'go to the moon',
+    userId: 2,
   },
   {
-    description: 'become a jedi'
+    description: 'become a jedi',
+    userId: 1,
   },
   {
     description: 'write a todo app',
-    status: 'PENDING'
+    status: 'PENDING',
+    userId: 2,
   },
   {
     description: 'fold laundry',
-    status: 'PENDING'
+    status: 'PENDING',
+    userId: 1,
   },
   {
     description: 'write a todo app',
-    status: 'PENDING'
+    status: 'PENDING',
+    userId: 1,
   },
   {
     description: 'eat breakfast',
-    status: 'COMPLETE'
+    status: 'COMPLETE',
+    userId: 2,
   },
   {
     description: 'play soccer',
-    status: 'COMPLETE'
+    status: 'COMPLETE',
+    userId: 1,
   },
   {
     description: 'be amazing',
-    status: 'COMPLETE'
+    status: 'COMPLETE',
+    userId: 1,
   },
 ]
 

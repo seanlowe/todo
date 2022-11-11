@@ -31,20 +31,19 @@ export const deleteTodo = async ( id, res ) => {
   }  
 }
 
-export const getAllTodos = async ( res ) => {
-  // add error handling
-  const todos = await db.todo.findMany()
+export const getTodos = async ( query, res ) => {
+  try {
+    const todos = await db.todo.findMany({
+      where: { ...query }
+    })
+  
+    return res.status( 200 ).json({ todos })
+  } catch ( error ) {
+    return res.status( 500 ).json({
+      message: 'Failed to retrieve todos'
+    })
+  }
 
-  return res.status( 200 ).json({ todos })
-}
-
-export const getFilteredTodos = async ( query, res ) => {
-  // add error handling
-  const todos = await db.todo.findMany({
-    where: { ...query }
-  })
-
-  return res.status( 200 ).json({ todos })
 }
 
 export const updateTodo = async ({ id, field, newFieldValue }, res ) => {

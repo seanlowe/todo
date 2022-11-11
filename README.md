@@ -44,3 +44,7 @@ production-password  xxxxxxxxxxxxx  xxxxxx.us-east-2.psdb.cloud  Can Read & Writ
 Then you will have all the values to fill in your DATABASE_URL.
 
 Snippet above pulled from Vercel's Next.js [example](https://github.com/vercel/next.js/tree/canary/examples/with-mysql) for using MySql.
+
+### Caveats
+
+Had to deal with having no relation / FK constraint between my Users and my Todos as Planetscale does not allow for FK and Prisma has no way of managing relations without a FK. In the end, I just decided that the userId will be manually added to each todo created and will only be an INT value that can be used to filter against.

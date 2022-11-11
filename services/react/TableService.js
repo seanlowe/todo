@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
-// import { rows } from '../../data/rows'
+import { rows } from '../../data/rows'
 // import { allPending } from '../../data/allPending'
 
 export const notify = ( response ) => {
@@ -20,19 +20,32 @@ export const notify = ( response ) => {
   }
 }
 
-export const getRows = async () => {
-  // add error handling
-  const { data: { todos } } = await axios.get( '/api/todo' )
-  return todos
+// export const getRows = async () => {
+//   // add error handling
+//   const { data: { todos } } = await axios.get( '/api/todo' )
+//   return todos
 
-  // switch comments for local data instead of planetscale DB data
-  // return rows
+//   // switch comments for local data instead of planetscale DB data
+//   // return rows
+// }
+
+const buildQueryParams = ( queryObject ) => {
+  let paramString = ''
+  for ( const [ key, value ] of Object.entries( queryObject )) {
+    paramString += `&${key}=${value}`
+  }
+
+  // remove the first, unnecessary '&'
+  return paramString.slice( 1 )
 }
 
 export const getFilteredRows = async ( query ) => {
+  const params = buildQueryParams( query )
   // add error handling
-  const { data: { todos } } = await axios.get( `/api/todo?${query}` )
+  const { data: { todos } } = await axios.get( `/api/todo?${params}` )
   return todos
+
+  // return rows
 }
 
 export const addItemToDB = async ( todo ) => {

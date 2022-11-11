@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
 import TableHead from '@mui/material/TableHead'
@@ -8,23 +8,24 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import RowItem from './RowItem/RowItem'
 import WatermarkItem from './RowItem/WatermarkedRowItem'
-import ActionsBar from './ActionsBar'
+import ActionsBar from './ActionsBar/ActionsBar'
 import styles from '../styles/Table.module.css'
 import * as TableService from '../services/react/TableService'
+import AuthContext from '../util/contexts/AuthContext'
 
 const CustomTable = () => {
   const [ rows, setRows ] = useState( [] )
   const [ filterStatus, setFilterStatus ] = useState( 'ALL' )
+  const { state: { userId } } = useContext( AuthContext )
+
 
   const retrieveRows = async ( filter = '' ) => {
-    const query = `status=${ filter ? `${filter}` : `${filterStatus}` }`
-    let rows = null
-
-    if ( query === 'status=ALL' ) {
-      rows = await TableService.getRows()
-    } else {
-      rows = await TableService.getFilteredRows( query )
+    const query = {
+      userId,
+      status: filter ? `${filter}` : `${filterStatus}`
     }
+
+    const rows = await TableService.getFilteredRows( query )
 
     setRows( rows )
   }

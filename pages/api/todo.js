@@ -9,13 +9,16 @@ const destroy = async ( req, res ) => {
 const get = async ( req, res ) => {
   const { query } = req
 
-  if ( !Object.keys( query ).length ) {
-    // no query was provided (i.e. no filtering),
-    // so just return all todo entries
-    return await todoService.getAllTodos( res )
-  } else {
-    return await todoService.getFilteredTodos( query, res )
+  if ( query.status === 'ALL' ) {
+    // no filter was selected, so just delete
+    // the status property so all entries are returned
+    delete query.status
   }
+
+  // make sure our userId stays a number and not a string
+  query.userId = parseInt( query.userId )
+
+  return await todoService.getTodos( query, res )
 }
 
 const store = async ( req, res ) => {
