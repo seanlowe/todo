@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import Layout from '../components/layout'
-import Login from '../components/Auth/Login'
+import Login from '../components/Login'
 import CustomTable from '../components/Table'
 import AuthContext from '../util/contexts/AuthContext'
 

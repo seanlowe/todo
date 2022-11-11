@@ -1,17 +1,10 @@
 import axios from 'axios'
 
-
 const lookUpUser = async ( username ) => {
-  const { data: { user } } = await axios.get( `/api/login?username=${username}` )
+  const { data: { user } } = await axios.get( `/api/user?username=${username}` )
 
   return user
 }
-
-// look for username / user id in DB
-// if not exist, create user and store hash (register)
-// if exist, retrieve hash and check current hash against stored hash
-// if match, return userID and login success
-// if not match, fail and display toastr
 
 export const loginFn = async ( dispatch, username, plainTextPassword ) => {
   const user = await lookUpUser( username )
@@ -22,15 +15,34 @@ export const loginFn = async ( dispatch, username, plainTextPassword ) => {
       enteredPassword: plainTextPassword      
     }
 
-    const { data, status } = await axios.post( '/api/login', userInformation )
+    try {
+      const response = await axios.post( '/api/login', userInformation )
 
-    // add better error handling
-    if ( status === 403 ) {
-      console.log( 'DENIED!' )
+      const { data: { id: userId, username: name } } = response
 
-      return
+      // authContext uses 'userId' instead of 'id' for clarity
+      dispatch({ type: 'signIn', payload: { userId, name } })
+    } catch ( error ) {
+      const { response: { data: { message } } } = error
+      console.log( message )
     }
+  }
+}
 
-    dispatch({ type: 'signIn', payload: { userId: data.userId, name: data.username } })
+export const registerFn = async ( dispatch, username, plainTextPassword ) => {
+  const userInformation = {
+    username, 
+    enteredPassword: plainTextPassword
+  }
+
+  try {
+    const response = await axios.post( '/api/user', userInformation )
+
+    const { data: { id: userId, username: name } } = response
+
+    dispatch({ type: 'signIn', payload: { userId, name } })
+  } catch ( error ) {
+    const { response: { data: { message } } } = error
+    console.log( message )
   }
 }
