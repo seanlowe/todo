@@ -6,6 +6,7 @@ export const addNewTodo = async ( todoToCreate, res ) => {
       data: {
         description: todoToCreate.description,
         status: todoToCreate.status,
+        userId: todoToCreate.userId,
       },
     })
 

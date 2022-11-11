@@ -44,7 +44,8 @@ const CustomTable = () => {
   const addItem = async ( value ) => {
     const entry = {
       description: value,
-      status: 'NEW'
+      status: 'NEW',
+      userId,
     }
 
     TableService.addItemToDB( entry ).then( async ( response ) => {
