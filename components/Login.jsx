@@ -46,7 +46,7 @@ const Login = () => {
             type='password'
             value={confirmedPassword}
             variant='filled'
-            error={confirmedPassword && ( password !== confirmedPassword )}
+            error={!!confirmedPassword && ( password !== confirmedPassword )}
             onChange={( e ) => {
               setConfirmedPassword( e.target.value )
             }}
