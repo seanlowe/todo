@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
-import styles from '../styles/FilterDropdown.module.css'
+import styles from '../../styles/FilterDropdown.module.css'
 
 const FilterDropdown = ({ isOpen, openCloseFn, filterCallback }) => {
   const [ selectedValue, setSelectedValue ] = useState( 'ALL' )

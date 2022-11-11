@@ -14,5 +14,10 @@
 
 .wrapper {
   position: absolute;
+  left: 0;
+}
+
+.signout {
+  position: absolute;
   right: 0;
 }
