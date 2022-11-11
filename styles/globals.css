@@ -15,6 +15,15 @@ a {
   box-sizing: border-box;
 }
 
+/* 
+  needed to make sure the filter dropdown is in the right spot
+  MUI likes to override things
+*/
+div.MuiPaper-root:nth-child(3) {
+  top: 210px !important;
+  left: 150px !important;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

@@ -1,6 +1,6 @@
 .dropdown {
   visibility: hidden;
-  position: absolute;
+  position: absolute !important;
   margin-top: -3.8rem;
   left: 5.5rem;
 }
