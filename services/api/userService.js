@@ -12,6 +12,12 @@ const generateHash = async ( enteredPassword ) => {
 export const createUser = async ( user, res ) => {
   const { username, enteredPassword } = user
 
+  if ( username === '' ) {
+    return res.status( 500 ).json({
+      message: 'Failed to create new user account.'
+    })
+  }
+
   const hashedPassword = await generateHash( enteredPassword )
 
   try {

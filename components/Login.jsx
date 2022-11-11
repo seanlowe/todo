@@ -1,5 +1,10 @@
 import { useContext, useState } from 'react'
-import { Button, Card, CardActions, CardContent, TextField } from '@mui/material'
+import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
+import CardContent from '@mui/material/CardContent'
+import CircularProgress from '@mui/material/CircularProgress'
+import TextField from '@mui/material/TextField'
 import AuthContext from '../util/contexts/AuthContext'
 import styles from '../styles/Login.module.css'
 import { loginFn, registerFn } from '../services/react/LoginService'
@@ -9,6 +14,7 @@ const Login = () => {
   const [ password, setPassword ] = useState( '' )
   const [ confirmedPassword, setConfirmedPassword ] = useState( '' )
   const [ register, setRegister ] = useState( false )
+  const [ loading, setLoading ] = useState( false )
   const { dispatch } = useContext( AuthContext )
 
   return (
@@ -57,30 +63,47 @@ const Login = () => {
         { !register && (
           <Button
             className={styles.button}
+            disabled={loading}
             type='submit'
             variant='contained'
-            onClick={() => {
-              loginFn( dispatch, username, password )
+            onClick={ async () => {
+              setLoading( true )
+
+              await loginFn( dispatch, username, password )
+
+              setLoading( false )
             }}
           >
-            Login
+            <div className={styles.wrapper}>
+              { loading && <CircularProgress className={styles.progress} /> }
+              <p className={styles.text} > Login </p>
+            </div>
           </Button>
         )}
         { register && (
           <Button
             className={styles.button}
+            disabled={loading}
             type='submit'
             variant='contained'
-            onClick={() => {
+            onClick={ async () => {
+              setLoading( true )
+
               if ( confirmedPassword === password ) {
-                registerFn( dispatch, username, password )
+                await registerFn( dispatch, username, password )
               }
+
+              setLoading( false )
             }}
           >
-            Create Account
+            <div className={styles.wrapper}>
+              { loading && <CircularProgress className={styles.progress} /> }
+              <p className={styles.text} > Create Account </p>
+            </div>
           </Button>
         )}
         <Button
+          disabled={loading}
           onClick={() => {
             setRegister( !register )
           }}
