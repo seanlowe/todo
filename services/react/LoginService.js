@@ -1,11 +1,15 @@
 import axios from 'axios'
 
-const lookUpUser = async ( username ) => {
+const lookUpUser = async ( username, create = false ) => {
   try {
     const { data: { user } } = await axios.get( `/api/user?username=${username}` )
   
     return user
   } catch ( error ) {
+    if ( create ) {
+      return false
+    }
+
     const { response: { data: { message }, status } } = error
 
     return { status, message }
@@ -52,7 +56,7 @@ export const registerFn = async ( dispatch, username, plainTextPassword ) => {
     return { status: 403, message: 'Username and password are required.' }
   }
 
-  const user = await lookUpUser( username )
+  const user = await lookUpUser( username, true )
   if ( user?.username ) {
     return { status: 403, message: 'A user already exists with that username.' }
   }
@@ -69,7 +73,7 @@ export const registerFn = async ( dispatch, username, plainTextPassword ) => {
 
     dispatch({ type: 'signIn', payload: { userId, name } })
 
-    return { status, message }
+    return { status, message: 'Account created.' }
   } catch ( error ) {
     const { response: { data: { message }, status } } = error
     console.log( message )

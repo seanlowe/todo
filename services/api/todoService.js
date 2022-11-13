@@ -24,7 +24,7 @@ export const deleteTodo = async ( id, res ) => {
       where: { id }
     })
 
-    return res.status( 204 )
+    return res.status( 204 ).end()
   } catch ( error ) {
     return res.status( 500 ).json({
       message: `Failed to delete entry with id: ${id}`
