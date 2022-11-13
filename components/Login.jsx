@@ -82,6 +82,11 @@ const Login = () => {
           type='password'
           value={password}
           variant='filled'
+          onKeyDown={( e ) => {
+            if ( e.key === 'Enter' && !register ) {
+              signIn()
+            }
+          }}
           onChange={( e ) => {
             setPassword( e.target.value )
           }}
@@ -95,6 +100,11 @@ const Login = () => {
             value={confirmedPassword}
             variant='filled'
             error={!!confirmedPassword && ( password !== confirmedPassword )}
+            onKeyDown={( e ) => {
+              if ( e.key === 'Enter' ) {
+                createAccount()
+              }
+            }}
             onChange={( e ) => {
               setConfirmedPassword( e.target.value )
             }}
