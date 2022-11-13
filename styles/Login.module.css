@@ -46,3 +46,19 @@
   width: 20px !important;
   height: 20px !important;
 }
+
+.paper {
+  background-color: #e8877d;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  width: 300px;
+}
+
+.warning {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 1rem;
+}

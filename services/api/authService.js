@@ -9,5 +9,5 @@ export const login = async ( body, res ) => {
     return res.status( 200 ).json({ message: 'credentials accepted', id, username })
   }
 
-  return res.status( 403 ).json({ message: 'not authorized, bad login creds' })
+  return res.status( 403 ).json({ message: 'Either username or password is incorrect.' })
 }

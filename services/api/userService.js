@@ -14,7 +14,7 @@ export const createUser = async ( user, res ) => {
 
   if ( username === '' ) {
     return res.status( 500 ).json({
-      message: 'Failed to create new user account.'
+      message: 'Username is required.'
     })
   }
 
@@ -41,9 +41,20 @@ export const createUser = async ( user, res ) => {
 }
 
 export const getUser = async ( query, res ) => {
-  const user = await db.user.findUnique({
-    where: { ...query }
-  })
+  try {
+    const user = await db.user.findUnique({
+      where: { ...query }
+    })
 
-  return res.status( 200 ).json({ user })
+    if ( !user ) {
+      throw new Error( 'no such user' )
+    }
+  
+    return res.status( 200 ).json({ user })
+  } catch ( error ) {
+    console.log( error )
+
+    return res.status( 404 ).json({ message: 'No user by that username.' })
+  }
+  
 }

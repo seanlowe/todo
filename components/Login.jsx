@@ -8,6 +8,8 @@ import TextField from '@mui/material/TextField'
 import AuthContext from '../util/contexts/AuthContext'
 import styles from '../styles/Login.module.css'
 import { loginFn, registerFn } from '../services/react/LoginService'
+import { Paper } from '@mui/material'
+import WarningIcon from '@mui/icons-material/Warning'
 
 const Login = () => {
   const [ username, setUsername ] = useState( '' )
@@ -15,7 +17,36 @@ const Login = () => {
   const [ confirmedPassword, setConfirmedPassword ] = useState( '' )
   const [ register, setRegister ] = useState( false )
   const [ loading, setLoading ] = useState( false )
+  const [ authError, setAuthError ] = useState( '' )
   const { dispatch } = useContext( AuthContext )
+
+  const signIn = async () => {
+    setLoading( true )
+
+    const response = await loginFn( dispatch, username, password )
+
+    if ( response.status === 404 ) {
+      setRegister( true )
+    }
+
+    if ( response.status !== 200 ) {
+      setAuthError( response.message )
+    }
+
+    setLoading( false )
+  }
+
+  const createAccount = async () => {
+    setLoading( true )
+
+    const response = await registerFn( dispatch, username, password )
+
+    if ( response.status !== 200 ) {
+      setAuthError( response.message )
+    }
+
+    setLoading( false )
+  }
 
   return (
     <Card variant='outlined'>
@@ -23,6 +54,17 @@ const Login = () => {
         Login
       </h1>
       <CardContent className={styles.content} >
+        { authError && (
+          <Paper
+            variant='outlined'
+            className={styles.paper}
+          >
+            <div className={styles.warning}>
+              <WarningIcon className={styles.icon} />
+              {authError}
+            </div>
+          </Paper>
+        )}
         <TextField
           required
           className={styles.input}
@@ -66,13 +108,7 @@ const Login = () => {
             disabled={loading}
             type='submit'
             variant='contained'
-            onClick={ async () => {
-              setLoading( true )
-
-              await loginFn( dispatch, username, password )
-
-              setLoading( false )
-            }}
+            onClick={signIn}
           >
             <div className={styles.wrapper}>
               { loading && <CircularProgress className={styles.progress} /> }
@@ -83,18 +119,10 @@ const Login = () => {
         { register && (
           <Button
             className={styles.button}
-            disabled={loading}
+            disabled={loading || confirmedPassword !== password}
             type='submit'
             variant='contained'
-            onClick={ async () => {
-              setLoading( true )
-
-              if ( confirmedPassword === password ) {
-                await registerFn( dispatch, username, password )
-              }
-
-              setLoading( false )
-            }}
+            onClick={createAccount}
           >
             <div className={styles.wrapper}>
               { loading && <CircularProgress className={styles.progress} /> }
@@ -106,6 +134,7 @@ const Login = () => {
           disabled={loading}
           onClick={() => {
             setRegister( !register )
+            setAuthError( '' )
           }}
         >
           {register ? 'Already' : "Don't"} Have an Account?
