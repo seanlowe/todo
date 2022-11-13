@@ -15,6 +15,10 @@ const lookUpUser = async ( username ) => {
 export const loginFn = async ( dispatch, username, plainTextPassword ) => {
   const user = await lookUpUser( username )
 
+  if ( username === '' || plainTextPassword === '' ) {
+    return { status: 403, message: 'Username and password are required.' }
+  }
+
   if ( user?.status === 404 ) {
     return { ...user }
   }
@@ -45,7 +49,7 @@ export const loginFn = async ( dispatch, username, plainTextPassword ) => {
 
 export const registerFn = async ( dispatch, username, plainTextPassword ) => {
   if ( username === '' || plainTextPassword === '' ) {
-    return { status: 403, message: 'Username and Password are required.' }
+    return { status: 403, message: 'Username and password are required.' }
   }
 
   const user = await lookUpUser( username )

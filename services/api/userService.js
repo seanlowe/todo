@@ -52,9 +52,6 @@ export const getUser = async ( query, res ) => {
   
     return res.status( 200 ).json({ user })
   } catch ( error ) {
-    console.log( error )
-
     return res.status( 404 ).json({ message: 'No user by that username.' })
   }
-  
 }
