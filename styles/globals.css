@@ -1,3 +1,16 @@
+/*
+  used to be in a "prefers-color-scheme": dark block
+  maybe should come back and add theme switcher
+*/
+html {
+  color-scheme: dark;
+}
+
+body {
+  color: white;
+  background: black;
+}
+
 html,
 body {
   padding: 0;
@@ -22,14 +35,4 @@ a {
 div.MuiPaper-root:nth-child(3) {
   top: 210px !important;
   left: 150px !important;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
 }
